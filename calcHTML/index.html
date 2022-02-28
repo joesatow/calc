@@ -12020,10 +12020,8 @@ input[type=radio] {
         if (ticker != tForm.elements[0].value.toUpperCase()) {
           changed = true;
           ticker = tForm.elements[0].value.toUpperCase();
-          console.log(changed);
         } else {
           changed = false;
-          console.log(changed);
         }
 
         if (changed == true) {
@@ -12091,6 +12089,9 @@ input[type=radio] {
           var mid = (bid + ask) / 2;
           if (targ > strike) {
             var percentGain = percIncrease(mid, targ - strike);
+            if (percentGain<100){
+              continue;
+            }
             if (cp == "CALL") {
               addContractsCode +=
                 "<label>" +
