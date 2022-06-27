@@ -136,9 +136,9 @@ function addContracts(data, cp) {
     var mid = (bid + ask) / 2;
     if (targ > strike) {
       var percentGain = percIncrease(mid, targ - strike);
-      // if (percentGain<100){
-      //   continue;
-      // }
+      if (percentGain<100){
+        continue;
+      }
       if (cp == "CALL") {
         addContractsCode +=
           "<label>" +
