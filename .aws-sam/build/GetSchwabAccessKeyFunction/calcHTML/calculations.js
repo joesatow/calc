@@ -11,44 +11,13 @@ var tForm = document.getElementById("tickerForm");
 var ticker = tForm.elements[0].value.toUpperCase();
 var underlyingPrice = 0;
 
-async function getSchwabToken() {
-  const response = await fetch("tokens.txt");
-  if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
-  }
-  const text = await response.text();
-  const lines = text.split('\n');
-  const keyValuePairs = lines.map(line => line.split('='));
-  const secondValue = keyValuePairs[1][1];
-  return secondValue
-}
-
-async function run() {
-  result = await test()
-  console.log(result)
-
-  const today = new Date().toISOString().split('T')[0];
-  console.log(today)
-}
-
-
 async function getDates() {
-  var bearerAuth = `Bearer ${await getSchwabToken()}`;
-  const today = new Date().toISOString().split('T')[0];
-
-  const myHeaders = new Headers();
-  myHeaders.append("Authorization", bearerAuth);
-
-  const requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow"
-  };
-  
-  const api_url = `https://api.schwabapi.com/marketdata/v1/chains?symbol=${ticker}&strikeCount=1&fromDate=${today}&toDate=2024-12-30`;
-  const response = await fetch(api_url, requestOptions);
+  const api_url =
+    "https://api.tdameritrade.com/v1/marketdata/chains?apikey=4WGUBOZHWUSYEMPL9NPVT9QM7GJO1TDQ&symbol=" +
+    ticker +
+    "&strikeCount=1&fromDate=2024-05-31&toDate=2024-10-31";
+  const response = await fetch(api_url);
   const data = await response.json();
-  
   underlyingPrice = data["underlyingPrice"];
   var addDatesCode = "";
   for (var key in data["callExpDateMap"]) {
@@ -67,28 +36,16 @@ async function getDates() {
 }
 
 async function getContracts(cp, date) {
-  var bearerAuth = `Bearer ${await getSchwabToken()}`;
-  const today = new Date().toISOString().split('T')[0];
-
-  const myHeaders = new Headers();
-  myHeaders.append("Authorization", bearerAuth);
-
-  const requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow"
-  };
-  
   const api_url =
-    "https://api.schwabapi.com/marketdata/v1/chains?symbol=" +
+    "https://api.tdameritrade.com/v1/marketdata/chains?apikey=4WGUBOZHWUSYEMPL9NPVT9QM7GJO1TDQ&symbol=" +
     ticker +
-    "&strikeCount=120&fromDate=" +
+    "&strikeCount=120&fromDate= " +
     date.substring(0, date.indexOf(":")) +
     "&toDate=" +
     date.substring(0, date.indexOf(":")) +
     "&contractType=" +
     cp;
-  const response = await fetch(api_url, requestOptions);
+  const response = await fetch(api_url);
   const contractsData = await response.json();
 
   if (cp == "CALL") {

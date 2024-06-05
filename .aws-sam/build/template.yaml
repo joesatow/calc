@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: "Template for \n"
+Globals:
+  Function:
+    Timeout: 3
+Resources:
+  GetSchwabAccessKeyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.10
+      Architectures:
+      - x86_64
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+      CodeUri: GetSchwabAccessKeyFunction
+    Metadata:
+      SamResourceId: GetSchwabAccessKeyFunction
+Outputs:
+  GetSchwabAccessKeyApi:
+    Description: API Gateway endpoint URL for Prod stage for Hello World function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
